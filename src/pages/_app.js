@@ -4,6 +4,16 @@ import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '@/lib/theme';
+import { LocalDataProvider } from '@/lib/local-data-context';
+import Layout from '@/components/layout';
+
+if (!__IS_SERVER__) {
+  console.log(
+    'Though it is inconsistency between server and client,',
+    'the better ux is to show empty data after receiving html',
+    'and correct data when it is available.'
+  );
+}
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
@@ -26,7 +36,12 @@ export default function MyApp(props) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Component {...pageProps} />
+
+        <LocalDataProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </LocalDataProvider>
       </ThemeProvider>
     </>
   );

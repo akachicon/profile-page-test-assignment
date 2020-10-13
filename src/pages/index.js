@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Profile from '@/components/profile';
 
 export default function Index() {
   return (
@@ -6,7 +7,7 @@ export default function Index() {
       <Head>
         <title>Sunlight test assignment</title>
       </Head>
-      <h1>Welcome!</h1>
+      <Profile />
     </>
   );
 }

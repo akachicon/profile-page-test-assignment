@@ -65,7 +65,8 @@ module.exports = {
             allowClassEnd: true,
           },
         ],
-        'react/react-in-jsx-scope': 'off',
+        'react/react-in-jsx-scope': 0,
+        'react/prop-types': 0,
       },
       settings: {
         'import/parsers': {

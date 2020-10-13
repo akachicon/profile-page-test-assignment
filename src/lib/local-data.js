@@ -1,5 +1,8 @@
 const USER = 'user';
 
+// getUser() will always return necessary fields if localStorage
+// is available, null otherwise.
+
 export function getUser() {
   try {
     const user = JSON.parse(localStorage.getItem(USER));
@@ -14,17 +17,17 @@ export function getUser() {
       phoneNumber: '',
     };
   } catch (e) {
-    return undefined;
+    return null;
   }
 }
 
 export function setUser(data) {
   try {
-    const userString = localStorage.getItem(USER);
-    const user = JSON.parse(userString);
+    const user = getUser();
     const newItem = JSON.stringify({ ...user, ...data });
-
     localStorage.setItem(USER, newItem);
+
+    return newItem;
   } catch (e) {
     // ignore
   }
