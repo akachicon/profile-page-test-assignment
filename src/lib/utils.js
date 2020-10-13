@@ -1,6 +1,6 @@
 export function denormalizeUserData(localDataUser) {
-  let firstName;
-  let lastName;
+  let name;
+  let email;
   let phoneNumber;
 
   // Though it is inconsistency between server and client,
@@ -8,26 +8,26 @@ export function denormalizeUserData(localDataUser) {
   // and correct data when it is available.
 
   if (__IS_SERVER__) {
-    firstName = '';
-    lastName = '';
+    name = '';
+    email = '';
     phoneNumber = '';
   } else if (localDataUser) {
     // localStorage is available
 
-    firstName = localDataUser.firstName || 'Аноним';
-    lastName = localDataUser.lastName;
+    name = localDataUser.name || 'Аноним';
+    email = localDataUser.email;
     phoneNumber = localDataUser.phoneNumber || 'Укажите номер телефона';
   } else {
     // localStorage is not available
 
-    firstName = 'Аноним';
-    lastName = '';
+    name = 'Аноним';
+    email = '';
     phoneNumber = 'Номер телефона не указан';
   }
 
   return {
-    firstName,
-    lastName,
+    name,
+    email,
     phoneNumber,
   };
 }

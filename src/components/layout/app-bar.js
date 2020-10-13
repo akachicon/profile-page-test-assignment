@@ -3,12 +3,8 @@ import { LocalDataContext } from '@/lib/local-data-context';
 
 export default function AppBar() {
   const {
-    user: { firstName, lastName },
+    user: { name },
   } = useContext(LocalDataContext);
 
-  return (
-    <div>
-      {firstName} {lastName}
-    </div>
-  );
+  return <div>{name}</div>;
 }

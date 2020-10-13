@@ -12,8 +12,8 @@ export function getUser() {
     }
 
     return {
-      firstName: '',
-      lastName: '',
+      name: '',
+      email: '',
       phoneNumber: '',
     };
   } catch (e) {
