@@ -47,6 +47,18 @@ export class ServerLogger extends Logger {
   log(level, message) {
     const logString = this.getLog(level, message);
     console.log('server:', logString);
+
+    // A hack to exclude server modules from client bundling.
+    // This is due to how the optimization works, after substituting
+    // __IS_SERVER__ with false for the client bundle, the optimizer
+    // will strip the whole 'if' block from the client bundle.
+    if (__IS_SERVER__) {
+      const fs = require('fs');
+
+      fs.appendFile('server.log', logString + '\n', (err) => {
+        if (err) console.log(err);
+      });
+    }
   }
 }
 
