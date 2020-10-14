@@ -1,22 +1,26 @@
-import { useCallback, useMemo } from 'react';
+import { useContext, useCallback, useMemo } from 'react';
 import useState from 'react-use-batched-state';
 import { TextField, Button } from '@material-ui/core';
 import { name, email, phone } from '@/lib/validators';
+import { LocalDataContext } from '@/lib/local-data-context';
 import useValidatedInput from './hooks/use-validated-input';
 import PhoneInput from './phone-input';
 
-function getInputError({ focused, dirty, valid, touched }, submitAttempted) {
-  return (
-    !valid && ((focused && dirty && touched) || touched || submitAttempted)
-  );
+function getInputError(valid, touched, submitAttempted) {
+  return !valid && (touched || submitAttempted);
 }
 
-export default function ProfileEditForm() {
+export default function ProfileEditForm({ onAfterSubmit }) {
+  const { user, updateUser } = useContext(LocalDataContext);
   const [submitAttempted, setSubmitAttempted] = useState(false);
 
-  const nameInput = useValidatedInput(name);
-  const emailInput = useValidatedInput(email);
-  const phoneInput = useValidatedInput(phone);
+  const defaultName = user?.name ?? '';
+  const defaultEmail = user?.email ?? '';
+  const defaultPhoneNumber = user?.phoneNumber ?? '';
+
+  const nameInput = useValidatedInput(name, defaultName);
+  const emailInput = useValidatedInput(email, defaultEmail);
+  const phoneInput = useValidatedInput(phone, defaultPhoneNumber);
 
   const validateName = nameInput.validate;
   const validateEmail = emailInput.validate;
@@ -38,17 +42,44 @@ export default function ProfileEditForm() {
       setSubmitAttempted(true);
 
       if (shouldSubmit) {
-        console.log('submit');
+        const phoneNumber = phoneInput.value.replace(/[+\s()_-]/g, '').slice(1);
+
+        updateUser({
+          name: nameInput.value,
+          email: emailInput.value,
+          phoneNumber,
+        });
+
+        onAfterSubmit?.();
       }
     },
-    [validateInputs]
+    [
+      onAfterSubmit,
+      validateInputs,
+      updateUser,
+      nameInput,
+      emailInput,
+      phoneInput,
+    ]
   );
 
   const InputProps = useMemo(() => ({ inputComponent: PhoneInput }), []);
 
-  const nameError = getInputError(nameInput, submitAttempted);
-  const emailError = getInputError(emailInput, submitAttempted);
-  const phoneError = getInputError(phoneInput, submitAttempted);
+  const nameError = getInputError(
+    nameInput.valid,
+    nameInput.touched,
+    submitAttempted
+  );
+  const emailError = getInputError(
+    emailInput.valid,
+    emailInput.touched,
+    submitAttempted
+  );
+  const phoneError = getInputError(
+    phoneInput.valid,
+    phoneInput.touched,
+    submitAttempted
+  );
 
   return (
     <form noValidate autoComplete="off" onSubmit={onSubmit}>
@@ -59,6 +90,7 @@ export default function ProfileEditForm() {
         inputProps={nameInput.inputProps}
         error={nameError}
         helperText={nameError && nameInput.errorHint}
+        defaultValue={defaultName}
       />
 
       <TextField
@@ -68,6 +100,7 @@ export default function ProfileEditForm() {
         inputProps={emailInput.inputProps}
         error={emailError}
         helperText={emailError && emailInput.errorHint}
+        defaultValue={defaultEmail}
       />
 
       <TextField
@@ -79,6 +112,7 @@ export default function ProfileEditForm() {
         error={phoneError}
         helperText={phoneError && phoneInput.errorHint}
         InputProps={InputProps}
+        defaultValue={defaultPhoneNumber}
       />
 
       <Button type="submit" variant="contained">

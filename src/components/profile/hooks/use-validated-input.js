@@ -2,8 +2,8 @@ import { useRef, useCallback, useEffect, useMemo } from 'react';
 import useState from 'react-use-batched-state';
 import usePersistentObject from '@/hooks/use-persistent-object';
 
-export default function useValidatedInput(validator) {
-  const [value, setValue] = useState('');
+export default function useValidatedInput(validator, defaultValue) {
+  const [value, setValue] = useState(defaultValue);
   const [errorHint, setErrorHint] = useState('');
   const valueRef = useRef('');
   const deferTimer = useRef(0);
@@ -12,21 +12,15 @@ export default function useValidatedInput(validator) {
   // value in callbacks without recreating callbacks.
   valueRef.current = value;
 
-  const [dirty, setDirty] = useState(false);
-  const [focused, setFocused] = useState(false);
   const [touched, setTouched] = useState(false);
   const [valid, setValid] = useState(true);
 
   const onBlur = useCallback(() => {
     setTouched(true);
-    setFocused(false);
   }, []);
-
-  const onFocus = useCallback(() => setFocused(true), []);
 
   const onChange = useCallback((e) => {
     setValue(e.target.value);
-    setDirty(true);
   }, []);
 
   const validate = useCallback(() => {
@@ -47,19 +41,17 @@ export default function useValidatedInput(validator) {
   const inputProps = useMemo(
     () => ({
       onBlur,
-      onFocus,
       onChange,
     }),
-    [onBlur, onFocus, onChange]
+    [onBlur, onChange]
   );
 
   return usePersistentObject({
     inputProps,
-    dirty: dirty,
-    focused: focused,
-    touched: touched,
+    touched,
     valid,
     validate,
     errorHint,
+    value,
   });
 }

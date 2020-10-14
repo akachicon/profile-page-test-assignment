@@ -16,7 +16,7 @@ export function denormalizeUserData(localDataUser) {
 
     name = localDataUser.name || 'Аноним';
     email = localDataUser.email;
-    phoneNumber = localDataUser.phoneNumber || 'Укажите номер телефона';
+    phoneNumber = localDataUser.phoneNumber || 'Номер телефона не указан';
   } else {
     // localStorage is not available
 
