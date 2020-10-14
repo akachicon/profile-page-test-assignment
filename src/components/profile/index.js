@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
+import useState from 'react-use-batched-state';
 import ProfileBar from './profile-bar';
 import ProfileEditForm from './profile-edit-form';
 import ProfileInfo from './profile-info';
@@ -8,7 +9,13 @@ export default function Profile() {
 
   const onEdit = useCallback(() => setIsEditing(true), []);
 
-  const children = isEditing ? <ProfileEditForm /> : <ProfileInfo />;
+  const onAfterSubmit = useCallback(() => setIsEditing(false), []);
+
+  const children = isEditing ? (
+    <ProfileEditForm onAfterSubmit={onAfterSubmit} />
+  ) : (
+    <ProfileInfo />
+  );
 
   return (
     <div>

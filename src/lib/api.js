@@ -13,7 +13,6 @@ export class Api {
     const passedSignal = fetchOptions?.signal;
 
     const handleConsumerAbort = () => {
-      console.log('client aborted');
       if (abortController.signal.aborted) {
         return;
       }

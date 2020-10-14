@@ -1,4 +1,5 @@
-import { createContext, useState } from 'react';
+import { createContext } from 'react';
+import useState from 'react-use-batched-state';
 import { getUser, setUser } from '@/lib/local-data';
 
 export const LocalDataContext = createContext();

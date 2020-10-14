@@ -3,8 +3,9 @@ import useState from 'react-use-batched-state';
 import { TextField, Button } from '@material-ui/core';
 import { name, email, phone } from '@/lib/validators';
 import { LocalDataContext } from '@/lib/local-data-context';
-import useValidatedInput from './hooks/use-validated-input';
+import useValidatedInput from '@/hooks/use-validated-input';
 import PhoneInput from './phone-input';
+import SaveDialogue, { stateMap as dialogueStateMap } from './save-dialogue';
 
 function getInputError(valid, touched, submitAttempted) {
   return !valid && (touched || submitAttempted);
@@ -13,8 +14,9 @@ function getInputError(valid, touched, submitAttempted) {
 const derivePhoneChangeValue = (val) => val;
 
 export default function ProfileEditForm({ onAfterSubmit }) {
-  const { user, updateUser } = useContext(LocalDataContext);
+  const { user } = useContext(LocalDataContext);
   const [submitAttempted, setSubmitAttempted] = useState(false);
+  const [submitData, setSubmitData] = useState(null);
 
   const defaultName = user?.name ?? '';
   const defaultEmail = user?.email ?? '';
@@ -48,23 +50,30 @@ export default function ProfileEditForm({ onAfterSubmit }) {
       setSubmitAttempted(true);
 
       if (shouldSubmit) {
-        updateUser({
+        setSubmitData({
           name: nameInput.value,
           email: emailInput.value,
           phoneNumber: phoneInput.value,
         });
-
-        onAfterSubmit?.();
       }
     },
-    [
-      onAfterSubmit,
-      validateInputs,
-      updateUser,
-      nameInput,
-      emailInput,
-      phoneInput,
-    ]
+    [nameInput, emailInput, phoneInput, validateInputs]
+  );
+
+  const onDialogueClose = useCallback(
+    (dialogueState) => {
+      const { SAVING, SAVED } = dialogueStateMap;
+
+      // Prevent user from closing dialogue while saving.
+      if (dialogueState === SAVING) return;
+
+      if (dialogueState === SAVED) {
+        onAfterSubmit();
+      }
+
+      setSubmitData(null);
+    },
+    [onAfterSubmit]
   );
 
   const InputProps = useMemo(() => ({ inputComponent: PhoneInput }), []);
@@ -122,6 +131,12 @@ export default function ProfileEditForm({ onAfterSubmit }) {
       <Button type="submit" variant="contained">
         Сохранить
       </Button>
+
+      <SaveDialogue
+        open={Boolean(submitData)}
+        onClose={onDialogueClose}
+        userData={submitData}
+      />
     </form>
   );
 }
