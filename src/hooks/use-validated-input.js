@@ -2,13 +2,7 @@ import { useRef, useCallback, useEffect, useMemo } from 'react';
 import useState from 'react-use-batched-state';
 import usePersistentObject from '@/hooks/use-persistent-object';
 
-const defaultDeriveChangeValue = (e) => e.target.value;
-
-export default function useValidatedInput(
-  validator,
-  defaultValue,
-  deriveChangeValue = defaultDeriveChangeValue
-) {
+export default function useValidatedInput(validator, defaultValue) {
   const [value, setValue] = useState(defaultValue);
   const [errorHint, setErrorHint] = useState('');
   const valueRef = useRef('');
@@ -25,12 +19,9 @@ export default function useValidatedInput(
     setTouched(true);
   }, []);
 
-  const onChange = useCallback(
-    (e) => {
-      setValue(deriveChangeValue(e));
-    },
-    [deriveChangeValue]
-  );
+  const onChange = useCallback((e) => {
+    setValue(e.target.value);
+  }, []);
 
   const validate = useCallback(() => {
     const validationResult = validator(valueRef.current);

@@ -26,11 +26,13 @@ export default function SaveDialogue({ open, onClose: onCloseProp, userData }) {
   const stateRef = useRef(state);
   stateRef.current = state;
 
-  const onClose = useCallback(() => onCloseProp(stateRef.current), [
-    onCloseProp,
-  ]);
+  const onClose = useCallback(() => {
+    onCloseProp(stateRef.current);
+  }, [onCloseProp]);
 
-  const onExited = useCallback(() => setState(ACKNOWLEDGEMENT), []);
+  const onExited = useCallback(() => {
+    setState(ACKNOWLEDGEMENT);
+  }, []);
 
   const onSave = useCallback(() => {
     setState(SAVING);

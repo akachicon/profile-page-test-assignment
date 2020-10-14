@@ -86,7 +86,7 @@ export function phone(str) {
   const normalizedString = trimmedStr.replace(/[+\s()_-]/g, '');
   const numberLength = normalizedString.length;
 
-  if (!numberLength) {
+  if (!numberLength || numberLength === 1) {
     return formatResult(false, 'Необходимо указать номер');
   }
 

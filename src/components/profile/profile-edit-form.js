@@ -4,14 +4,12 @@ import { TextField, Button } from '@material-ui/core';
 import { name, email, phone } from '@/lib/validators';
 import { LocalDataContext } from '@/lib/local-data-context';
 import useValidatedInput from '@/hooks/use-validated-input';
-import PhoneInput from './phone-input';
+import PhoneInput from '@/components/common/phone-input';
 import SaveDialogue, { stateMap as dialogueStateMap } from './save-dialogue';
 
 function getInputError(valid, touched, submitAttempted) {
   return !valid && (touched || submitAttempted);
 }
-
-const derivePhoneChangeValue = (val) => val;
 
 export default function ProfileEditForm({ onAfterSubmit }) {
   const { rawUser: user } = useContext(LocalDataContext);
@@ -24,11 +22,7 @@ export default function ProfileEditForm({ onAfterSubmit }) {
 
   const nameInput = useValidatedInput(name, defaultName);
   const emailInput = useValidatedInput(email, defaultEmail);
-  const phoneInput = useValidatedInput(
-    phone,
-    defaultPhoneNumber,
-    derivePhoneChangeValue
-  );
+  const phoneInput = useValidatedInput(phone, defaultPhoneNumber);
 
   const validateName = nameInput.validate;
   const validateEmail = emailInput.validate;
@@ -125,7 +119,7 @@ export default function ProfileEditForm({ onAfterSubmit }) {
         error={phoneError}
         helperText={phoneError && phoneInput.errorHint}
         InputProps={InputProps}
-        value={phoneInput.value}
+        defaultValue={phoneInput.value}
       />
 
       <Button type="submit" variant="contained">
