@@ -1,6 +1,20 @@
+import logger, { levels } from '@/lib/logger';
+
 export default (req, res) => {
-  setTimeout(() => {
-    res.statusCode = 200;
-    res.json({});
-  }, 2000);
+  fetch('http://jsonplaceholder.typicode.com/posts', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-token-access': 'random',
+    },
+    body: req.body,
+  }).then(
+    () => {
+      res.statusCode = 200;
+      res.json({});
+    },
+    (err) => {
+      logger.log(levels.ERROR, err);
+    }
+  );
 };

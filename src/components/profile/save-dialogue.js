@@ -36,10 +36,14 @@ export default function SaveDialogue({ open, onClose: onCloseProp, userData }) {
     setState(SAVING);
 
     minDelay(
-      api.request('/api/profile-update', {
-        method: 'POST',
-        body: JSON.stringify(userData),
-      })
+      api.request(
+        '/api/profile-update',
+        {
+          method: 'POST',
+          body: JSON.stringify(userData),
+        },
+        { timeout: 5000 }
+      )
     ).then(
       () => {
         updateUser(userData);

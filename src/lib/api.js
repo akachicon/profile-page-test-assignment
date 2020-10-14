@@ -4,7 +4,7 @@ import { HttpError, WrongResponseBodyError } from '@/lib/errors';
 // we agree that all endpoints set content-type of application/json.
 
 export class Api {
-  constructor({ timeout = 5000 } = {}) {
+  constructor({ timeout = 120000 } = {}) {
     this.timeout = timeout;
   }
 
