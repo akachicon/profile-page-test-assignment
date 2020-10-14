@@ -14,7 +14,7 @@ function getInputError(valid, touched, submitAttempted) {
 const derivePhoneChangeValue = (val) => val;
 
 export default function ProfileEditForm({ onAfterSubmit }) {
-  const { user } = useContext(LocalDataContext);
+  const { rawUser: user } = useContext(LocalDataContext);
   const [submitAttempted, setSubmitAttempted] = useState(false);
   const [submitData, setSubmitData] = useState(null);
 

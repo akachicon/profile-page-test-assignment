@@ -24,8 +24,8 @@ export function getUser() {
 export function setUser(data) {
   try {
     const user = getUser();
-    const newItem = JSON.stringify({ ...user, ...data });
-    localStorage.setItem(USER, newItem);
+    const newItem = { ...user, ...data };
+    localStorage.setItem(USER, JSON.stringify(newItem));
 
     return newItem;
   } catch (e) {
