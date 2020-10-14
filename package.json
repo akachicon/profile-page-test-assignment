@@ -21,10 +21,10 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
+    "@mirco312312/react-imask": "^6.0.6",
     "next": "9.5.5",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-number-format": "^4.4.1",
     "react-use-batched-state": "^1.0.3"
   },
   "devDependencies": {

@@ -1,16 +1,16 @@
-import NumberFormat from 'react-number-format';
+import { IMaskInput } from '@mirco312312/react-imask';
+
+// TODO: switch to official react-imask when available.
+// https://github.com/uNmAnNeR/imaskjs/issues/383
 
 export default function PhoneInput(props) {
-  const { inputRef, ...other } = props;
+  const { onChange, ...other } = props;
 
   return (
-    <NumberFormat
+    <IMaskInput
       {...other}
-      getInputRef={inputRef}
-      isNumericString
-      decimalScale={0}
-      format="+7 ### ### ## ##"
-      allowEmptyFormatting
+      onAccept={onChange}
+      mask="{+7 }000{ }000{ }00{ }00"
     />
   );
 }

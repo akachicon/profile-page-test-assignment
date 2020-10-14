@@ -1,5 +1,3 @@
-import { number } from 'prop-types';
-
 const formatResult = (isValid, errorMessage) => ({
   isValid,
   errorMessage,
@@ -77,7 +75,7 @@ export function email(str) {
   );
 
   if (!isValid) {
-    return formatResult(false, 'Укажите корректный e-mail');
+    return formatResult(false, 'Некорректный e-mail');
   }
 
   return formatResult(true, '');
@@ -88,12 +86,12 @@ export function phone(str) {
   const normalizedString = trimmedStr.replace(/[+\s()_-]/g, '');
   const numberLength = normalizedString.length;
 
-  if (numberLength === 0 || numberLength === 1) {
+  if (!numberLength) {
     return formatResult(false, 'Необходимо указать номер');
   }
 
   if (normalizedString.length !== 11) {
-    return formatResult(false, 'Укажите корректный номер');
+    return formatResult(false, 'Некорректный номер');
   }
 
   return formatResult(true, '');

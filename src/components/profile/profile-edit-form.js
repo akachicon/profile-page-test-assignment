@@ -10,6 +10,8 @@ function getInputError(valid, touched, submitAttempted) {
   return !valid && (touched || submitAttempted);
 }
 
+const derivePhoneChangeValue = (val) => val;
+
 export default function ProfileEditForm({ onAfterSubmit }) {
   const { user, updateUser } = useContext(LocalDataContext);
   const [submitAttempted, setSubmitAttempted] = useState(false);
@@ -20,7 +22,11 @@ export default function ProfileEditForm({ onAfterSubmit }) {
 
   const nameInput = useValidatedInput(name, defaultName);
   const emailInput = useValidatedInput(email, defaultEmail);
-  const phoneInput = useValidatedInput(phone, defaultPhoneNumber);
+  const phoneInput = useValidatedInput(
+    phone,
+    defaultPhoneNumber,
+    derivePhoneChangeValue
+  );
 
   const validateName = nameInput.validate;
   const validateEmail = emailInput.validate;
@@ -42,12 +48,10 @@ export default function ProfileEditForm({ onAfterSubmit }) {
       setSubmitAttempted(true);
 
       if (shouldSubmit) {
-        const phoneNumber = phoneInput.value.replace(/[+\s()_-]/g, '').slice(1);
-
         updateUser({
           name: nameInput.value,
           email: emailInput.value,
-          phoneNumber,
+          phoneNumber: phoneInput.value,
         });
 
         onAfterSubmit?.();
@@ -112,7 +116,7 @@ export default function ProfileEditForm({ onAfterSubmit }) {
         error={phoneError}
         helperText={phoneError && phoneInput.errorHint}
         InputProps={InputProps}
-        defaultValue={defaultPhoneNumber}
+        value={phoneInput.value}
       />
 
       <Button type="submit" variant="contained">
