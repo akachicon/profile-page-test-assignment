@@ -3,57 +3,107 @@ const formatResult = (isValid, errorMessage) => ({
   errorMessage,
 });
 
+const getNamePartFormatter = (returnFirstMessage) => (
+  isValid,
+  firstNameMessage,
+  lastNameMessage
+) =>
+  formatResult(
+    isValid,
+    returnFirstMessage ? firstNameMessage : lastNameMessage
+  );
+
+function namePart(namePartStr, formatResult) {
+  const namePartRegex = /^[а-яА-ЯЁё-]+$/;
+
+  if (!namePartRegex.test(namePartStr)) {
+    return formatResult(
+      false,
+      'Имя содержит недопустимые символы',
+      'Фамилия содержит недопустимые символы'
+    );
+  }
+
+  if (
+    namePartStr[0] !== namePartStr[0].toUpperCase() ||
+    namePartStr[0] === '-'
+  ) {
+    return formatResult(
+      false,
+      'Имя должно начинаться с заглавной буквы',
+      'Фамилия должна начинаться с заглавной буквы'
+    );
+  }
+
+  if (namePartStr.slice(-1) === '-') {
+    return formatResult(false, 'Некорректное имя', 'Некорректная фамилия');
+  }
+
+  const compositeName = namePartStr.split('-').filter((w) => w.length);
+
+  if (compositeName.length === 1) {
+    if (compositeName[0].slice(1) !== compositeName[0].slice(1).toLowerCase()) {
+      return formatResult(
+        false,
+        'Имя содержит недопустимые заглавные буквы',
+        'Фамилия содержит недопустимые заглавные буквы'
+      );
+    }
+  }
+
+  if (compositeName.length === 2) {
+    if (compositeName[1][0] !== compositeName[1][0].toUpperCase()) {
+      return formatResult(
+        false,
+        'Имя должно начинаться с заглавной буквы',
+        'Фамилия должна начинаться с заглавной буквы'
+      );
+    }
+
+    if (
+      compositeName[0].slice(1) !== compositeName[0].slice(1).toLowerCase() ||
+      compositeName[1].slice(1) !== compositeName[1].slice(1).toLowerCase()
+    ) {
+      return formatResult(
+        false,
+        'Имя содержит недопустимые заглавные буквы',
+        'Фамилия содержит недопустимые заглавные буквы'
+      );
+    }
+  }
+
+  if (compositeName.length > 2) {
+    return formatResult(false, 'Некорректное имя', 'Некорректная фамилия');
+  }
+
+  return formatResult(true, '');
+}
+
 export function name(str) {
   const words = str
     .trim()
     .split(' ')
     .filter((w) => w.length);
-  const firstNameRegex = /^[а-яА-ЯЁё]+$/;
-  const lastNameRegex = /^[а-яА-ЯЁё-]+$/;
 
   if (!words.length) {
     return formatResult(false, 'Поле не должно быть пустым');
   }
 
   const [firstName, lastName] = words;
+  const firstNameResult = namePart(firstName, getNamePartFormatter(true));
 
-  if (!firstNameRegex.test(firstName)) {
-    return formatResult(false, 'Имя должно содержать только русские буквы');
-  }
-
-  if (firstName[0] !== firstName[0].toUpperCase()) {
-    return formatResult(false, 'Имя должно начинаться с заглавной буквы');
+  if (!firstNameResult.isValid) {
+    return firstNameResult;
   }
 
   if (words.length === 1) {
     return formatResult(false, 'Поле должно содержать имя и фамилию');
   }
 
-  if (!lastNameRegex.test(lastName)) {
-    return formatResult(false, 'Фамилия должна содержать только русские буквы');
-  }
+  const lastNameResult = namePart(lastName, getNamePartFormatter(false));
 
-  if (lastName[0] !== lastName[0].toUpperCase() || lastName[0] === '-') {
-    return formatResult(false, 'Фамилия должна начинаться с заглавной буквы');
-  }
-
-  if (lastName.slice(-1) === '-') {
-    return formatResult(false, 'Некорректная фамилия');
-  }
-
-  const compositeLastName = lastName.split('-').filter((w) => w.length);
-
-  if (compositeLastName.length >= 2) {
-    if (
-      compositeLastName.length === 2 &&
-      compositeLastName[1][0] !== compositeLastName[1][0].toUpperCase()
-    ) {
-      return formatResult(false, 'Фамилия должна начинаться с заглавной буквы');
-    }
-
-    if (compositeLastName.length > 2) {
-      return formatResult(false, 'Некорректная фамилия');
-    }
+  if (!lastNameResult.isValid) {
+    return lastNameResult;
   }
 
   if (words.length > 2) {

@@ -15,6 +15,8 @@ export default (req, res) => {
     },
     (err) => {
       logger.log(levels.ERROR, err);
+      res.statusCode = 500;
+      res.json({});
     }
   );
 };

@@ -15,13 +15,13 @@ export function denormalizeUserData(localDataUser) {
     // localStorage is available
 
     name = localDataUser.name || 'Аноним';
-    email = localDataUser.email;
+    email = localDataUser.email || 'E-mail не указан';
     phoneNumber = localDataUser.phoneNumber || 'Номер телефона не указан';
   } else {
     // localStorage is not available
 
     name = 'Аноним';
-    email = '';
+    email = 'E-mail не указан';
     phoneNumber = 'Номер телефона не указан';
   }
 
@@ -30,4 +30,22 @@ export function denormalizeUserData(localDataUser) {
     email,
     phoneNumber,
   };
+}
+
+export function shortenUserName(name) {
+  const [firstName, lastName] = name.split(' ');
+
+  if (!lastName) return name;
+
+  const compositeLastName = lastName.split('-');
+
+  const shortLastName =
+    compositeLastName.length === 2
+      ? `${compositeLastName[0].slice(0, 1)}.-${compositeLastName[1].slice(
+          0,
+          1
+        )}.`
+      : `${lastName.slice(0, 1)}.`;
+
+  return `${firstName} ${shortLastName}`;
 }
