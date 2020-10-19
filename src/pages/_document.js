@@ -7,6 +7,7 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <link rel="icon" href="/favicon.ico" sizes="16x16" />
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap"

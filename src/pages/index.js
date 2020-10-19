@@ -5,7 +5,7 @@ export default function Index() {
   return (
     <>
       <Head>
-        <title>Sunlight test assignment</title>
+        <title>Profile page</title>
       </Head>
       <Profile />
     </>
