@@ -30,15 +30,17 @@ function ssrMatchMedia(query) {
     theme.breakpoints.only('xs'),
     theme.breakpoints.down('xs'),
     theme.breakpoints.down('sm'),
-  ].includes(query);
+  ]
+    .map((q) => q.replace(/^@media( ?)/m, ''))
+    .includes(query);
 
   // Treat all theme queries below 'sm' as true.
   if (isBelowSm) {
-    return true;
+    return { matches: true };
   }
 
   // Treat unknown queries as false.
-  return false;
+  return { matches: false };
 }
 
 export default function useSmallScreenMatch(initialRender = true) {

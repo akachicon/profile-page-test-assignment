@@ -18,6 +18,16 @@ const theme = createMuiTheme({
     borderRadius: 10,
   },
   spacing: 8,
+  overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        body: {
+          minHeight: '-webkit-fill-available',
+          fallbacks: [{ minHeight: '-moz-available' }, { minHeight: '100vh' }],
+        },
+      },
+    },
+  },
 });
 
 theme.shadows[25] = '0px 4px 10px rgba(0, 0, 0, 0.15)';

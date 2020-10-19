@@ -1,16 +1,12 @@
 import { useCallback, useRef } from 'react';
 import useState from 'react-use-batched-state';
-import { makeStyles } from '@material-ui/core';
 import PageHeader from '@/components/common/page-header';
 import PageBreadcrumbs from '@/components/common/page-breadcrumbs';
 import ProfileBar from './profile-bar';
 import ProfileEditForm from './profile-edit-form';
 import ProfileInfo from './profile-info';
 
-const useStyles = makeStyles((theme) => ({}));
-
 export default function Profile() {
-  const cls = useStyles();
   const [isEditing, setIsEditing] = useState(false);
   const isEditingRef = useRef(isEditing);
   isEditingRef.current = isEditing;

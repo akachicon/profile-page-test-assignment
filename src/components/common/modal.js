@@ -17,6 +17,8 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
+    borderBottomRightRadius: 0,
+    borderBottomLeftRadius: 0,
   },
   dialogContainer: {
     minWidth: 600,
@@ -95,7 +97,7 @@ export default function Modal({
         <CloseIcon />
       </IconButton>
     ),
-    [onClose]
+    [onClose, cls.closeButton]
   );
 
   return smallScreen ? (
