@@ -16,12 +16,14 @@
 - Adaptive design including different modals for small and large screens.
 
 ## Build and run
+
+The following command will build and start production server on port 3000:   
 ```
-npm run build:prod && npm run serve:prod
+npm run deploy:local
 ``` 
-The server listens on port 3000.
 
 ## Implementation notes
+
 In production ssr solution we tend not to store on the client the data that 
 will be hydrated from the server. This is due to react expectations of the 
 reconciliation process - it expects data to be equal. In this task though, for 

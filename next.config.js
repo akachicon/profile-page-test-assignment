@@ -1,4 +1,3 @@
-const bundleAnalyzerPlugin = require('@next/bundle-analyzer');
 const globals = require('./globals');
 
 const getDefinePluginConfig = (isDev, isServer) => ({
@@ -29,8 +28,4 @@ const nextConfig = {
   },
 };
 
-const bundleAnalyzer = bundleAnalyzerPlugin({
-  enabled: process.env.ANALYZE_BUNDLE === 'true',
-});
-
-module.exports = bundleAnalyzer(nextConfig);
+module.exports = nextConfig;
