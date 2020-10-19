@@ -6,12 +6,13 @@ import theme from '@/lib/theme';
 import { LocalDataProvider } from '@/lib/local-data-context';
 import Layout from '@/components/layout';
 
-if (!__IS_SERVER__) {
-  console.log(
-    'Though it is inconsistency between server and client,',
-    'the better ux is to show empty data after receiving html',
-    'and correct data when it is available.'
-  );
+const hydrationNote =
+  'Though it is inconsistency between server and client, ' +
+  'the better ux is to show empty data after receiving html ' +
+  'and correct data when it is available.';
+
+if (!__IS_SERVER__ && __IS_DEV__) {
+  console.log('%c%s', 'color: green', hydrationNote);
 }
 
 export default function MyApp(props) {

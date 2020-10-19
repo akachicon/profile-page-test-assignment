@@ -8,7 +8,7 @@
     }
   },
   "scripts": {
-    "serve:dev": "next dev",
+    "watch:dev": "next dev",
     "serve:prod": "next start",
     "build:prod": "next build",
     "deploy": "npm run build:prod && npm run serve:prod",
@@ -30,6 +30,7 @@
     "react-use-batched-state": "^1.0.3"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^9.5.5",
     "@typescript-eslint/parser": "^4.4.0",
     "eslint": "^7.11.0",
     "eslint-config-prettier": "^6.12.0",
